@@ -8,15 +8,27 @@ class App extends Component {
     state = {
         characters: []
     };
+    constructor(props){
+        super(props);
+        const storage=window.localStorage;
+        for(let i=0;i<storage.length;i++){
+            const item={
+                name:JSON.parse(storage.getItem(storage.key(i))).name,
+                job:JSON.parse(storage.getItem(storage.key(i))).job
+            }
+            this.state.characters.push(item);
 
-    removeCharacter = index => {
+        }
+    }
+    removeCharacter = (index,name) => {
         const { characters } = this.state;
-    
+        const storage=window.localStorage;
         this.setState({
             characters: characters.filter((character, i) => { 
                 return i !== index;
             })
         });
+        storage.removeItem(name);
     }
 
     handleSubmit = (character) => {

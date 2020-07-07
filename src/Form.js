@@ -5,7 +5,6 @@ import { Form, Input, Button} from 'antd';
 class Forms extends Component {
     constructor(props) {
         super(props);
-        
         this.initialState = {
             name: '',
             job: ''
@@ -16,40 +15,40 @@ class Forms extends Component {
 
     handleChange = event => {
         const { name, value } = event.target;
-
         this.setState({
             [name] : value
-        });
+		});
+		
     }
 
-    onFormSubmit = (event) => {
-		event.preventDefault();
-		this.props.handleSubmit(this.state);
-		this.setState(this.initialState);
-    }
+    
 
     render() {
-        const { name, job } = this.state; 
+		const onFinish = () => {
+			//event.preventDefault();
+			const storage=window.localStorage;
+			storage.setItem(this.state.name,JSON.stringify(this.state));
+			this.props.handleSubmit(this.state);
+			this.setState(this.initialState);		
+		  };
         return (
 			<center>
-				<form
-				onSubmit={this.onFormSubmit}>
+				<Form onFinish={onFinish}>
 					<Form.Item
 						label="Todo"
-						name="name"
 						rules={[{ required: true}]}
 					>
-						<Input name="name" required id="name" value={name} onChange={this.handleChange} />
+						<Input name="name" required value={this.state.name} onChange={this.handleChange} />
 					</Form.Item>
 					<Form.Item
 						label="Time"
 					>
-						<Input name="job" id="job" value={job} onChange={this.handleChange}/>
+						<Input name="job" value={this.state.job} onChange={this.handleChange}/>
 					</Form.Item>
 				    <Button type="primary" htmlType="submit">
 				        Add
 				    </Button>
-				</form>
+				</Form>
 			</center>
             
         );

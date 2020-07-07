@@ -21,7 +21,7 @@ const TableBody = props => {
 			<tr key={index}>
 				<td>{row.name}</td>
 				<td>{row.job}</td>
-				<td><Button type="text" onClick={() => props.removeCharacter(index)}>Delete</Button></td>
+				<td><Button type="text" onClick={() => props.removeCharacter(index,row.name)}>Delete</Button></td>
 			</tr>
         );
     });
