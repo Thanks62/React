@@ -18,11 +18,11 @@ const TableHeader = () => {
 const TableBody = props => { 
     const rows = props.characterData.map((row, index) => {
         return (
-            <tr key={index}>
-                <td>{row.name}</td>
-                <td>{row.job}</td>
-                <td><Button onClick={() => props.removeCharacter(index)} type="primary">Delete</Button></td>
-            </tr>
+			<tr key={index}>
+				<td>{row.name}</td>
+				<td>{row.job}</td>
+				<td><Button type="text" onClick={() => props.removeCharacter(index)}>Delete</Button></td>
+			</tr>
         );
     });
 

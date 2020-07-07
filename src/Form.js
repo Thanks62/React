@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Form.css'
-import { Form, Input, Button,Layout} from 'antd';
+import { Form, Input, Button} from 'antd';
 
 class Forms extends Component {
     constructor(props) {
@@ -30,7 +30,6 @@ class Forms extends Component {
 
     render() {
         const { name, job } = this.state; 
-		const {Content}=Layout;
         return (
 			<center>
 				<form
