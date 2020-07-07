@@ -9,7 +9,7 @@ const TableHeader = () => {
             <tr>
                 <th>To Do</th>
                 <th>Time</th>
-                <th>Remove</th>
+                <th>Operation</th>
             </tr>
         </thead>
     );
@@ -21,7 +21,10 @@ const TableBody = props => {
 			<tr key={index}>
 				<td>{row.name}</td>
 				<td>{row.job}</td>
-				<td><Button type="text" onClick={() => props.removeCharacter(index,row.name)}>Delete</Button></td>
+				<td>
+                    <Button type="text" onClick={() => props.editList(index)}>Edit</Button>
+                    <Button type="text" onClick={() => props.removeCharacter(index,row.id)}>Delete</Button>
+                </td>
 			</tr>
         );
     });
@@ -30,11 +33,11 @@ const TableBody = props => {
 }
 
 const Table = (props) => {
-    const { characterData, removeCharacter } = props;
+    const { characterData, removeCharacter,editList } = props;
         return (
             <table>
                 <TableHeader />
-                <TableBody characterData={characterData} removeCharacter={removeCharacter} />
+                <TableBody editList={editList} characterData={characterData} removeCharacter={removeCharacter} />
             </table>
         );
 }

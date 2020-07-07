@@ -6,7 +6,8 @@ class Forms extends Component {
     constructor(props) {
         super(props);
         this.initialState = {
-            name: '',
+			id:new Date(),
+			name: '',
             job: ''
         };
 
@@ -20,20 +21,36 @@ class Forms extends Component {
 		});
 		
     }
-
-    
+	componentDidMount(){
+		this.props.onRef(this);
+	}
+    edit=(name,id,job)=>{
+		console.log(name);
+		this.setState({
+			id:id,
+			name:name,
+			job:job
+		})
+	}
 
     render() {
 		const onFinish = () => {
-			//event.preventDefault();
 			const storage=window.localStorage;
-			storage.setItem(this.state.name,JSON.stringify(this.state));
+			storage.setItem(document.getElementById('ID').value,JSON.stringify(this.state));
+			this.setState({
+				id : document.getElementById('ID').value
+			});
 			this.props.handleSubmit(this.state);
-			this.setState(this.initialState);		
+			this.setState(this.initialState);	
+			this.setState({
+				id : new Date()
+			});	
+			window.location.reload();
 		  };
         return (
 			<center>
 				<Form onFinish={onFinish}>
+					<Input name="id" id="ID" value={this.state.id} type="hidden"/>
 					<Form.Item
 						label="Todo"
 						rules={[{ required: true}]}
