@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import './Form.css'
-import { Form, Input, Button } from 'antd';
+import { Form, Input, Button,Layout} from 'antd';
 
 class Forms extends Component {
     constructor(props) {
@@ -23,42 +23,36 @@ class Forms extends Component {
     }
 
     onFormSubmit = (event) => {
-        event.preventDefault();
-        
-        this.props.handleSubmit(this.state);
-        this.setState(this.initialState);
+		event.preventDefault();
+		this.props.handleSubmit(this.state);
+		this.setState(this.initialState);
     }
 
     render() {
         const { name, job } = this.state; 
-		const layout = {
-		  labelCol: {
-		    span: 8,
-		  },
-		  wrapperCol: {
-		    span: 16,
-		  },
-		};
+		const {Content}=Layout;
         return (
-            <form {...layout} onSubmit={this.onFormSubmit}>
-                <label for="name">ToDo</label>
-                <Input 
-                    type="text" 
-                    name="name" 
-                    id="name"
-                    value={name} required
-                    onChange={this.handleChange} />
-                <label for="job">Time</label>
-                <Input 
-                    type="text" 
-                    name="job" 
-                    id="job"
-                    value={job} 
-                    onChange={this.handleChange} />
-                <button type="submit">
-                    Add
-                </button>
-            </form>
+			<center>
+				<form
+				onSubmit={this.onFormSubmit}>
+					<Form.Item
+						label="Todo"
+						name="name"
+						rules={[{ required: true}]}
+					>
+						<Input name="name" required id="name" value={name} onChange={this.handleChange} />
+					</Form.Item>
+					<Form.Item
+						label="Time"
+					>
+						<Input name="job" id="job" value={job} onChange={this.handleChange}/>
+					</Form.Item>
+				    <Button type="primary" htmlType="submit">
+				        Add
+				    </Button>
+				</form>
+			</center>
+            
         );
     }
 }
