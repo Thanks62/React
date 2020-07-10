@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { Row,Col, Divider,Card } from 'antd';
-import './App.css';
-import Table from './Table.js'
-import Form from './Form';
-
-class App extends Component {
+import './App.css'
+import Forms from './Forms'
+import Table from './Table'
+import { List } from 'antd/lib/form/Form';
+class App extends Component{
     state = {
         characters: [],
         edit:[]
@@ -12,18 +12,18 @@ class App extends Component {
     constructor(props){
         super(props);
         this.init();
+		
     }
     init=()=>{
-        const storage=window.localStorage;
-        for(let i=0;i<storage.length;i++){
-            console.log(storage.key(i));
-            const item={
-                id:storage.key(i),
-                name:JSON.parse(storage.getItem(storage.key(i))).name,
-                job:JSON.parse(storage.getItem(storage.key(i))).job
-            }
-            this.state.characters.push(item);
-        }
+        if(window.localStorage){
+            const storage=window.localStorage;
+            let list=storage.getItem("list");
+            this.state.characters=JSON.parse(list);
+			this.setState({
+			    characters:JSON.parse(list)
+			})
+			console.log(this.state.characters);
+        } 
     }
     removeCharacter = (index,id) => {
         const { characters } = this.state;
@@ -33,22 +33,18 @@ class App extends Component {
                 return i !== index;
             })
         });
-        storage.removeItem(id);
+        let list=JSON.parse(storage.getItem("list"));
+        //去掉原有数据（edit情况）
+        list=list.filter((li)=>{
+            return li.id!=id;
+        })
+        storage.setItem("list",JSON.stringify(list));
     }
 
     editList = (index)=>{
         var list=this.state.characters.filter((character, i) => { 
             return i === index;
         })
-        //console.log(list[0]);
-        //this.Form.edit(list.name,list.id,list.job)
-        /*this.setState({
-            edit:[{
-                id:list[0].id,
-                name:list[0].name,
-                job:list[0].job
-            }]
-        });*/
         this.state.edit=[{
             id:list[0].id,
             name:list[0].name,
@@ -62,33 +58,25 @@ class App extends Component {
     }
 
     handleSubmit = (character) => {
-       // this.setState({characters: [...this.state.characters, character]});
        this.init();
     }
-
-    render() {
+    render(){
         const { characters,edit } = this.state;
-        
-        return (
-		<Row justify="center" align="middle">
-			<Col>
-				<Card style={{width:600}} className="Content">
-					<div className="container">
-						<h1>List</h1>
-						<p>A Todo List</p>
-						<Table
-							characterData={characters}
+        return(<Row justify="center" align="middle">
+        <Col>
+            <Card style={{width:600}} className="Content">
+                <div className="container">
+                    <h1>List</h1>
+                    <p>A Todo List</p>
+                    <Table characterData={characters}
                             removeCharacter={this.removeCharacter}
-                            editList={this.editList}
-						/>
-						<Divider orientation="center">Add New</Divider>
-						<Form handleSubmit={this.handleSubmit} onRef={this.onRef}/>
-					</div>
-				</Card>
-			</Col>
-		</Row>
-        );
+                            editList={this.editList}></Table>
+                    <Divider orientation="center">Add New</Divider>
+                    <Forms  handleSubmit={this.handleSubmit} onRef={this.onRef} init={this.init}/>
+                </div>
+            </Card>
+        </Col>
+    </Row>)
     }
 }
-
 export default App;
