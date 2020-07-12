@@ -2,63 +2,59 @@ import React, { Component } from 'react';
 import { Row,Col, Divider,Card } from 'antd';
 import './App.css'
 import Forms from './Forms'
-import Table from './Table'
+import Tables from './Tables'
 import { List } from 'antd/lib/form/Form';
+import store from './store/index';
+import {removeToDo,addToDo,init,editToDo} from './action/index';
 class App extends Component{
-    state = {
-        characters: [],
-        edit:[]
-    };
+	state={
+		
+	}
     constructor(props){
         super(props);
-        this.init();
-		
+		store.dispatch(init());
+		this.state.characters=store.getState();
     }
-    init=()=>{
-        if(window.localStorage){
-            const storage=window.localStorage;
-            let list=storage.getItem("list");
-            this.state.characters=JSON.parse(list);
+    removeCharacter = (id) => {
+		let unsubscribe = store.subscribe(() =>{
+			const storage=window.localStorage;
+			console.log(JSON.stringify(store.getState()));
+			storage.setItem("list",JSON.stringify(store.getState()));
 			this.setState({
-			    characters:JSON.parse(list)
+				characters:store.getState()
 			})
-			console.log(this.state.characters);
-        } 
+		}
+		);
+		store.dispatch(removeToDo(id))
+		unsubscribe();
     }
-    removeCharacter = (index,id) => {
-        const { characters } = this.state;
-        const storage=window.localStorage;
-        this.setState({
-            characters: characters.filter((character, i) => { 
-                return i !== index;
-            })
-        });
-        let list=JSON.parse(storage.getItem("list"));
-        //去掉原有数据（edit情况）
-        list=list.filter((li)=>{
-            return li.id!=id;
-        })
-        storage.setItem("list",JSON.stringify(list));
-    }
-
     editList = (index)=>{
-        var list=this.state.characters.filter((character, i) => { 
-            return i === index;
+        var list=this.state.characters.filter((character) => { 
+            return character.id === index;
         })
-        this.state.edit=[{
-            id:list[0].id,
-            name:list[0].name,
-            job:list[0].job
-        }];
-        console.log(this.state.edit);
+		//console.log(list);
         this.form.edit(list[0].name,list[0].id,list[0].job);
     }
     onRef=(ref)=>{
         this.form=ref;
     }
 
-    handleSubmit = (character) => {
-       this.init();
+    handleSubmit = (character,operation) => {
+	   let unsubscribe = store.subscribe(() =>{
+	   			const storage=window.localStorage;
+	   			storage.setItem("list",JSON.stringify(store.getState()));
+	   			this.setState({
+	   				characters:store.getState()
+	   			})
+	   }
+	   );
+	   if(operation=='Edit'){
+			store.dispatch(editToDo(character.id,character.name,character.job))
+	   }
+	   else if(operation=='Add'){
+			store.dispatch(addToDo(character.name,character.id,character.job))
+	   }
+	   unsubscribe();
     }
     render(){
         const { characters,edit } = this.state;
@@ -68,11 +64,11 @@ class App extends Component{
                 <div className="container">
                     <h1>List</h1>
                     <p>A Todo List</p>
-                    <Table characterData={characters}
+                    <Tables characterData={characters}
                             removeCharacter={this.removeCharacter}
-                            editList={this.editList}></Table>
+                            editList={this.editList}></Tables>
                     <Divider orientation="center">Add New</Divider>
-                    <Forms  handleSubmit={this.handleSubmit} onRef={this.onRef} init={this.init}/>
+                    <Forms  handleSubmit={this.handleSubmit} onRef={this.onRef}/>
                 </div>
             </Card>
         </Col>

@@ -34,7 +34,6 @@ class Forms extends Component {
 		this.props.onRef(this);
 	}
     edit=(name,id,job)=>{
-		console.log(name);
 		this.setState({
 			id:id,
 			name:name,
@@ -69,27 +68,13 @@ class Forms extends Component {
 					},1000)
 				}
 				else{
-					const storage=window.localStorage;
-					let list=[];
-					list=JSON.parse(storage.getItem("list"));
-					//去掉原有数据（edit情况）
-					list=list.filter((li)=>{
-						return li.id!=this.state.id;
-					})
-					//新增当前数据
-					if(list) list.push(this.state);
-					else list=[this.state];
-					storage.setItem("list",JSON.stringify(list));
-					this.setState({
-						id : document.getElementById('ID').value,
-						btnText:'Successfully'
-					});
-					this.props.handleSubmit(this.state);
+					this.props.handleSubmit(this.state,this.state.btnText);
 					setTimeout(()=>{
 						this.setState(this.initialState);
+						this.setState({
+							id:new Date()
+						});
 					},1000)
-					
-					this.props.init();
 				}
 				
 			}, 2000);
