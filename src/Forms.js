@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import './Form.css'
 import { Form, Input, Button} from 'antd';
 
-class Forms extends Component {
+/*class Forms extends Component {
 	state={
 		loading:false,
 		btnText:'',
@@ -84,6 +84,7 @@ class Forms extends Component {
 				danger:false
 			})
 		  };
+		  
         return (
 			<center>
 				<Form onFinish={onFinish}>
@@ -107,6 +108,68 @@ class Forms extends Component {
             
         );
     }
+}*/
+class Forms extends Component{
+	state={}
+	constructor(props) {
+	    super(props);
+	    this.initialState = {
+			btnText:'Add',
+			err:true,
+			loading:false,
+			danger:false
+	    };
+	    this.state = this.initialState;
+	}
+	onFinish = () => {	
+		this.setState({
+			loading:true
+		})
+		setTimeout(()=>{
+			if(this.state.err){
+				this.setState({
+					loading:false,
+					btnText:'Failed',
+					danger:true
+				})
+			}
+			else{
+				this.props.onAdd(this.todo.state.value,this.id.state.value,this.time.state.value);
+				this.id.state.value=new Date();
+				this.setState({
+					loading:false,
+					btnText:'Successfully'
+				})
+			}		
+			setTimeout(()=>{
+				this.setState({
+					btnText:'Add',
+					danger:false
+				})
+			},1000)
+		},2000)
+	}
+	render(){
+		return(
+		<center>
+			<Form onFinish={this.onFinish}>
+				<Input name="id" id="ID" ref={(id)=>this.id=id} defaultValue={new Date().toString()} type="hidden"/>
+				<Form.Item
+					label="Todo"
+					rules={[{ required: true}]}
+				>
+					<Input name="name" required ref={(todo)=>this.todo=todo}/>
+				</Form.Item>
+				<Form.Item
+					label="Time"
+				>
+					<Input name="job" ref={(time)=>this.time=time}/>
+				</Form.Item>
+			    <Button type="primary" htmlType="submit" loading={this.state.loading} disabled={this.state.loading} danger={this.state.danger}>
+			        {this.state.btnText}
+			    </Button>
+			</Form>
+		</center>)
+	}
 }
-
 export default Forms;

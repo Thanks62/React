@@ -1,28 +1,32 @@
 import {ADD_TODO,REMOVE_TODO,DEFAULT,EDIT_TODO} from'../action/index.js';
-var initState=[];
+var initState={};
 function init(){
 	if (window.localStorage){
         const storage=window.localStorage;
         let list=storage.getItem("list");
-        initState=JSON.parse(list)?JSON.parse(list):[];
+        initState=JSON.parse(list)?{data:JSON.parse(list)}:[];
 	}
 }
 init();
 export default function(state=initState,action){
 	switch(action.type){
-		case ADD_TODO:return[
-			...state,
-			{
-				id:action.data.id,
-				name:action.data.text,
-				job:action.data.time
-			}
-		]
+		case ADD_TODO:return{
+			data:[
+				...state.data,
+				{
+					id:action.data.id,
+					name:action.data.text,
+					job:action.data.time
+				}
+			]
+		} 
 		case REMOVE_TODO:
 		let list=[];
-			return list=state.filter((li)=>{
-			return li.id!==action.id;
-		})
+		return{
+			data:list=state.data.filter((li)=>{
+				return li.id!==action.id;
+			} 
+		)}
 		case EDIT_TODO:
 		let edit=[];
 			return edit=state.map((li)=>{

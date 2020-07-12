@@ -1,13 +1,14 @@
 import React, { Component } from 'react';
 import { Row,Col, Divider,Card } from 'antd';
 import './App.css'
-import Forms from './Forms'
-import Tables from './Tables'
-import { List } from 'antd/lib/form/Form';
+//import Forms from './Forms'
+//import Tables from './Tables'
+import ToDoList from './container/ToDoList'
+import AddToDo from './container/AddToDo'
 import store from './store/index';
 import {removeToDo,addToDo,init,editToDo} from './action/index';
 class App extends Component{
-	state={
+	/*state={
 		
 	}
     constructor(props){
@@ -48,21 +49,21 @@ class App extends Component{
 	   			})
 	   }
 	   );
-	   if(operation=='Edit'){
+	   if(operation==='Edit'){
 			store.dispatch(editToDo(character.id,character.name,character.job))
 	   }
-	   else if(operation=='Add'){
+	   else if(operation==='Add'){
 			store.dispatch(addToDo(character.name,character.id,character.job))
 	   }
 	   unsubscribe();
-    }
+    }*/
     render(){
-        const { characters,edit } = this.state;
+        /*const { characters } = this.state;
         return(<Row justify="center" align="middle">
         <Col>
             <Card style={{width:600}} className="Content">
                 <div className="container">
-                    <h1>List</h1>
+                    <h1>List{this.props}</h1>
                     <p>A Todo List</p>
                     <Tables characterData={characters}
                             removeCharacter={this.removeCharacter}
@@ -72,7 +73,22 @@ class App extends Component{
                 </div>
             </Card>
         </Col>
-    </Row>)
+    </Row>)/*/
+	return(
+		<Row justify="center" align="middle">
+		    <Col>
+		        <Card style={{width:600}} className="Content">
+		            <div className="container">
+		                <h1>List</h1>
+		                <p>A Todo List</p>
+		                <ToDoList></ToDoList>
+		                <Divider orientation="center">Add New</Divider>
+						<AddToDo></AddToDo>
+					</div>
+		        </Card>
+		    </Col>
+		</Row>
+	)
     }
 }
 export default App;

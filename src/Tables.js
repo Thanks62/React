@@ -3,7 +3,7 @@ import { Button,Table,Space } from 'antd';
 import './App.css';
 const { Column } = Table;
 
-const Tables = (props) => {
+/*const Tables = (props) => {
     const { characterData, removeCharacter,editList } = props;
         return (
             <Table dataSource={characterData} >
@@ -12,8 +12,23 @@ const Tables = (props) => {
 				<Column title="Operation" 
 					render={(record) => (
 					        <Space size="middle">
-					          <Button type="text" onClick={() => props.editList(record.id)}>Edit</Button>
-					          <Button type="text"  onClick={() => props.removeCharacter(record.id)}>Delete</Button>
+					          <Button type="text" onClick={() => editList(record.id)}>Edit</Button>
+					          <Button type="text"  onClick={() => removeCharacter(record.id)}>Delete</Button>
+					        </Space>
+					      )}
+				/>
+			</Table>
+        );
+}*/
+const Tables = ({data,onRemove}) => {
+        return (
+            <Table dataSource={data} >
+				<Column title="To Do" dataIndex="name" key="id" />
+				<Column title="Time" dataIndex="job" key="id" />
+				<Column title="Operation" 
+					render={(record) => (
+					        <Space size="middle">
+					          <Button type="text"  onClick={() => onRemove(record.id)}>Delete</Button>
 					        </Space>
 					      )}
 				/>
