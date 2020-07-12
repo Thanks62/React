@@ -20,7 +20,7 @@ const { Column } = Table;
 			</Table>
         );
 }*/
-const Tables = ({data,onRemove}) => {
+const Tables = ({data,onRemove,onEditClick}) => {
         return (
             <Table dataSource={data} >
 				<Column title="To Do" dataIndex="name" key="id" />
@@ -28,7 +28,8 @@ const Tables = ({data,onRemove}) => {
 				<Column title="Operation" 
 					render={(record) => (
 					        <Space size="middle">
-					          <Button type="text"  onClick={() => onRemove(record.id)}>Delete</Button>
+								<Button type="text" onClick={() => onEditClick(record.id,record.name,record.job)}>Edit</Button>
+								<Button type="text"  onClick={() => onRemove(record.id)}>Delete</Button>
 					        </Space>
 					      )}
 				/>

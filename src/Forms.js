@@ -115,13 +115,14 @@ class Forms extends Component{
 	    super(props);
 	    this.initialState = {
 			btnText:'Add',
-			err:true,
+			err:false,
 			loading:false,
 			danger:false
 	    };
 	    this.state = this.initialState;
 	}
 	onFinish = () => {	
+		console.log(this.props);
 		this.setState({
 			loading:true
 		})
@@ -134,7 +135,10 @@ class Forms extends Component{
 				})
 			}
 			else{
-				this.props.onAdd(this.todo.state.value,this.id.state.value,this.time.state.value);
+				if(this.state.btnText==='Add')
+					this.props.onAdd(this.todo.state.value,this.id.state.value,this.time.state.value);
+				else if(this.state.btnText==='Edit')
+					this.props.onEdit(this.id.state.value,this.todo.state.value,this.time.state.value);
 				this.id.state.value=new Date();
 				this.setState({
 					loading:false,
@@ -153,17 +157,17 @@ class Forms extends Component{
 		return(
 		<center>
 			<Form onFinish={this.onFinish}>
-				<Input name="id" id="ID" ref={(id)=>this.id=id} defaultValue={new Date().toString()} type="hidden"/>
+				<Input name="id" id="ID" value={this.props.input_data.id} ref={(id)=>this.id=id} defaultValue={new Date().toString()} type="hidden"/>
 				<Form.Item
 					label="Todo"
 					rules={[{ required: true}]}
 				>
-					<Input name="name" required ref={(todo)=>this.todo=todo}/>
+					<Input name="name" value={this.props.input_data.name} required ref={(todo)=>this.todo=todo}/>
 				</Form.Item>
 				<Form.Item
 					label="Time"
 				>
-					<Input name="job" ref={(time)=>this.time=time}/>
+					<Input name="job" value={this.props.input_data.job} ref={(time)=>this.time=time}/>
 				</Form.Item>
 			    <Button type="primary" htmlType="submit" loading={this.state.loading} disabled={this.state.loading} danger={this.state.danger}>
 			        {this.state.btnText}
